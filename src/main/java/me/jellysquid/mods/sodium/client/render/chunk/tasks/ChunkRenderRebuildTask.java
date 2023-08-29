@@ -17,6 +17,7 @@ import me.jellysquid.mods.sodium.client.render.chunk.passes.BlockRenderPass;
 import me.jellysquid.mods.sodium.client.render.pipeline.context.ChunkRenderCacheLocal;
 import me.jellysquid.mods.sodium.client.util.task.CancellationSource;
 import me.jellysquid.mods.sodium.client.world.WorldSlice;
+import me.jellysquid.mods.sodium.client.world.WorldSliceLocal;
 import me.jellysquid.mods.sodium.client.world.cloned.ChunkRenderContext;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -113,7 +114,7 @@ public class ChunkRenderRebuildTask extends ChunkRenderBuildTask {
 
                             long seed = blockState.getRenderingSeed(blockPos);
 
-                            if (cache.getBlockRenderer().renderModel(slice, blockState, blockPos, offset, model, buffers.get(layer), true, seed, modelData)) {
+                            if (cache.getBlockRenderer().renderModel(cache.getWorldSliceLocal(), blockState, blockPos, offset, model, buffers.get(layer), true, seed, modelData)) {
                                 rendered = true;
                             }
                     	}
@@ -129,7 +130,7 @@ public class ChunkRenderRebuildTask extends ChunkRenderBuildTask {
 
                             ForgeHooksClient.setRenderType(layer);
 
-                            if (cache.getFluidRenderer().render(slice, fluidState, blockPos, offset, buffers.get(layer))) {
+                            if (cache.getFluidRenderer().render(cache.getWorldSliceLocal(), fluidState, blockPos, offset, buffers.get(layer))) {
                                 rendered = true;
                             }
                         }

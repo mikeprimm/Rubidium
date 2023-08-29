@@ -7,6 +7,7 @@ import me.jellysquid.mods.sodium.client.render.pipeline.BlockRenderer;
 import me.jellysquid.mods.sodium.client.render.pipeline.ChunkRenderCache;
 import me.jellysquid.mods.sodium.client.render.pipeline.FluidRenderer;
 import me.jellysquid.mods.sodium.client.world.WorldSlice;
+import me.jellysquid.mods.sodium.client.world.WorldSliceLocal;
 import me.jellysquid.mods.sodium.client.world.cloned.ChunkRenderContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.block.BlockModels;
@@ -20,9 +21,11 @@ public class ChunkRenderCacheLocal extends ChunkRenderCache {
 
     private final BlockModels blockModels;
     private final WorldSlice worldSlice;
+    private WorldSliceLocal worldSliceLocal;
 
     public ChunkRenderCacheLocal(MinecraftClient client, World world) {
         this.worldSlice = new WorldSlice(world);
+        this.worldSliceLocal = new WorldSliceLocal(this.worldSlice);
         this.lightDataCache = new ArrayLightDataCache(this.worldSlice);
 
         LightPipelineProvider lightPipelineProvider = new LightPipelineProvider(this.lightDataCache);
@@ -49,9 +52,14 @@ public class ChunkRenderCacheLocal extends ChunkRenderCache {
     public void init(ChunkRenderContext context) {
         this.lightDataCache.reset(context.getOrigin());
         this.worldSlice.copyData(context);
+        this.worldSliceLocal = new WorldSliceLocal(this.worldSlice);
     }
 
     public WorldSlice getWorldSlice() {
         return this.worldSlice;
+    }
+    
+    public WorldSliceLocal getWorldSliceLocal() {
+        return this.worldSliceLocal;
     }
 }
